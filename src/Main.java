@@ -64,7 +64,7 @@ public class Main {
 			while(disk1.containsRef(pos))
 				pos=rn.nextInt(size);
 			
-			int deadline=rn.nextInt(size)+1;
+			int deadline=rn.nextInt(size-1)+1;
 			
 			disk1.refferences.insert(new Rekord(pos, deadline));
 			disk12.refferences.insert(new Rekord(pos, deadline));
@@ -101,13 +101,13 @@ public class Main {
 		System.out.print("\n");
 		System.out.printf("|%10s|%10s|%10s|%10s|%10s|%10s|", "Algorytm", "Standard", "Z EDF", "Odrzucenia", "Z FD-SCAN", "Odrzucenia");
 		System.out.print("\n");
-		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "FCFS", FCFS(disk1, disk1.defaultPos), 0, 0, 0, 0);//fordisk13[0]+FCFS(disk13,fordisk13[2]), fordisk13[1]);
+		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "FCFS", FCFS(disk1, disk1.defaultPos), 0, 0, fordisk13[0]+FCFS(disk13,fordisk13[2]), fordisk13[1]);
 		System.out.print("\n");
-		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "SSTF", 0, 0, 0, 0, 0);//fordisk23[0]+0, fordisk23[1]);
+		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "SSTF", 0, 0, 0, fordisk23[0]+0, fordisk23[1]);
 		System.out.print("\n");
-		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "SCAN", SCAN(disk3, disk3.defaultPos), 0, 0, 0, 0);//fordisk33[0]+SCAN(disk33,fordisk33[2]), fordisk33[1]);
+		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "SCAN", SCAN(disk3, disk3.defaultPos), 0, 0, fordisk33[0]+SCAN(disk33,fordisk33[2]), fordisk33[1]);
 		System.out.print("\n");
-		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "C-SCAN", CSCAN(disk4, disk4.defaultPos), 0, 0, 0, 0);//fordisk43[0]+CSCAN(disk43,fordisk43[2]), fordisk43[1]);
+		System.out.printf("|%-10s|%10d|%10d|%10d|%10s|%10s|", "C-SCAN", CSCAN(disk4, disk4.defaultPos), 0, 0, fordisk43[0]+CSCAN(disk43,fordisk43[2]), fordisk43[1]);
 	}
 	
 	/*we wszystkich algorytmach czas zliczamy na podstawie liczby bloków, przez które g³owica musi przejœæ do celu
@@ -176,7 +176,7 @@ public class Main {
 	}
 	//wynikiem jest trzyelementowa tablica zawieraj¹ca w komórce 0 czas realizacji, liczbê odrzuconych zadañ w komórce 1 i ostatni¹ pozycjê g³owic w komórce 2
 	public static int[] FDSCAN(HDD disk){
-		int[] result=new int[2];
+		int[] result=new int[3];
 		int time=0;
 		int rejected=0;
 		Rekord nearest;
@@ -184,8 +184,9 @@ public class Main {
 		while(disk.containsDeadlines()){
 			nearest=disk.nearestDeadline(currentPos);
 			int deadlinePos=nearest.getPos();
+			System.out.println(deadlinePos);
 			if (nearest.getDeadline()<=Math.abs(currentPos-deadlinePos))	//je¿eli czas przejœcia do celu jest mniejszy ni¿ jego deadline
-				if (deadlinePos-currentPos<0)
+				if (deadlinePos<currentPos)
 					// kiedy deadline znajduje siê ni¿ej pozycji bie¿¹cej
 					for (int i=currentPos; i>=deadlinePos; i--){
 						if(disk.removeRefAt(i)){
@@ -204,6 +205,7 @@ public class Main {
 			else
 				//doliczamy do zadañ odrzuconych 
 				rejected++;
+			//System.out.println(rejected);	
 		}
 		result[0]=time;
 		result[1]=rejected;

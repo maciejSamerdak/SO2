@@ -14,7 +14,7 @@ public class HDD {
 	public boolean containsRef(int pos){
 		Rekord temp;
 		for (int i=0; i<refferences.size(); i++){
-			temp=(Rekord)refferences.getValue(i);
+			temp=(Rekord)refferences.getValue(i+1);
 			if (temp.getPos()==pos)
 				return true;
 		}
@@ -24,9 +24,9 @@ public class HDD {
 	public boolean removeRefAt(int pos){
 		Rekord temp;
 		for (int i=0; i<refferences.size(); i++){
-			temp=(Rekord)refferences.getValue(i);
+			temp=(Rekord)refferences.getValue(i+1);
 			if (temp.getPos()==pos){
-				refferences.removeAt(i);
+				refferences.removeAt(i+1);
 				return true;
 			}
 		}
@@ -36,8 +36,8 @@ public class HDD {
 	public boolean containsDeadlines(){
 		Rekord temp;
 		for (int i=0; i<refferences.size(); i++){
-			temp=(Rekord)refferences.getValue(i);
-			if (temp.getDeadline()>0)
+			temp=(Rekord)refferences.getValue(i+1);
+			if (temp.getDeadline()!=0)
 				return true;
 		}
 		return false;
@@ -48,14 +48,39 @@ public class HDD {
 		int n=-1;
 		Rekord temp;
 		for (int i=0; i<refferences.size(); i++){
-			temp=(Rekord)refferences.getValue(i);
-			int d=Math.abs(temp.getPos()-currentPos);
-			if (d<min){
-				min=d;
-				n=i;
+			temp=(Rekord)refferences.getValue(i+1);
+			if (temp.getDeadline()!=0){
+				int d=Math.abs(temp.getPos()-currentPos);
+				if (d<min){
+					min=d;
+					n=i;
+				}
 			}
 		}
-		return (Rekord)refferences.getValue(n);
+		if(n!=-1)
+		return (Rekord)refferences.getValue(n+1);
+		else
+		return null;
+	}
+	
+	public Rekord shortestDeadline(){
+		int min=size;
+		int n=-1;
+		Rekord temp;
+		for (int i=0; i<refferences.size(); i++){
+			temp=(Rekord)refferences.getValue(i+1);
+			if (temp.getDeadline()!=0){
+				int deadline=temp.getDeadline();
+				if (deadline<min){
+					min=deadline;
+					n=i;
+				}
+			}
+		}
+		if(n!=-1)
+		return (Rekord)refferences.getValue(n+1);
+		else
+		return null;
 	}
 	
 	public int getSize(){

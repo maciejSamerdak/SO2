@@ -45,11 +45,11 @@ public class Queue {
 				return true;
 			}
 			Element it=head;
-			for (int i=2; i<n; i++)
+			for (int i=0; i<n-2; i++)
 				it=it.getNext();
-				it.setNext(it.getNext().getNext());
-				size--;
-				return true;
+			it.setNext(it.getNext().getNext());
+			size--;
+				return true;	
 		}
 		return false;
 	}
